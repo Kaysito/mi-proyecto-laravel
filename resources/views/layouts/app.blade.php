@@ -285,12 +285,8 @@
 
 <body class="flex h-screen overflow-hidden">
 
-    <!-- ╔══════════════════════════════════════╗ -->
-    <!-- ║              SIDEBAR                 ║ -->
-    <!-- ╚══════════════════════════════════════╝ -->
     <aside id="sidebar" aria-label="Navegación principal">
 
-        <!-- Logo / Brand -->
         <div class="sidebar-logo h-[60px] flex items-center px-5 gap-3">
             <div class="logo-mark">
                 <i class="fas fa-bolt text-white text-xs"></i>
@@ -301,10 +297,8 @@
             </div>
         </div>
 
-        <!-- Navigation -->
         <nav class="flex-1 overflow-y-auto py-2" aria-label="Menú principal">
 
-            <!-- ── Seguridad ── -->
             <div class="nav-group-label">Seguridad</div>
 
             <a href="{{ route('perfil.index') }}" class="nav-link {{ request()->routeIs('perfil.*') ? 'active' : '' }}" aria-label="Perfil de usuario">
@@ -324,7 +318,6 @@
                 <span>Usuarios</span>
             </a>
 
-            <!-- ── Principal 1 ── -->
             <div class="nav-group-label">Principal 1</div>
 
             <a href="{{ route('p1.1.index') }}" class="nav-link {{ request()->routeIs('p1.1.*') ? 'active' : '' }}">
@@ -336,7 +329,6 @@
                 <span>Principal 1.2</span>
             </a>
 
-            <!-- ── Principal 2 ── -->
             <div class="nav-group-label">Principal 2</div>
 
             <a href="{{ route('p2.1.index') }}" class="nav-link {{ request()->routeIs('p2.1.*') ? 'active' : '' }}">
@@ -349,7 +341,6 @@
             </a>
         </nav>
 
-        <!-- Status + Logout -->
         <div class="pb-1">
             <div class="flex items-center gap-2 px-5 py-3 border-t border-[var(--neon-border)]">
                 <div class="status-dot"></div>
@@ -363,25 +354,20 @@
     </aside>
 
 
-    <!-- ╔══════════════════════════════════════╗ -->
-    <!-- ║           MAIN AREA                  ║ -->
-    <!-- ╚══════════════════════════════════════╝ -->
     <div class="flex flex-col flex-1 min-w-0 h-screen">
 
-        <!-- ── Topbar ─────────────────────────────────────────── -->
         <header id="topbar" class="flex items-center px-6 gap-4 flex-shrink-0" role="banner">
 
-            <!-- Breadcrumb -->
             <nav aria-label="Ubicación" class="flex-1 flex items-center gap-1 text-[13px]">
-                <i class="fas fa-house text-[var(--text-3)] text-[11px]"></i>
+                <a href="{{ route('home') }}" class="text-[var(--text-3)] hover:text-[var(--neon)] transition-colors" title="Ir al Inicio">
+                    <i class="fas fa-house text-[11px]"></i>
+                </a>
                 <span class="breadcrumb-sep">/</span>
                 @yield('breadcrumb', '<span style="color:var(--text-2)">Dashboard</span>')
             </nav>
 
-            <!-- Right controls -->
             <div class="flex items-center gap-3">
 
-                <!-- Search -->
                 <div class="relative hidden sm:block">
                     <i class="fas fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-3)] text-[11px]"></i>
                     <input
@@ -392,16 +378,13 @@
                     >
                 </div>
 
-                <!-- Notifications -->
                 <button class="icon-btn" aria-label="Notificaciones (3 nuevas)">
                     <i class="fas fa-bell text-xs"></i>
                     <span class="notif-dot" aria-hidden="true"></span>
                 </button>
 
-                <!-- Divider -->
                 <div style="width:1px; height:22px; background:var(--surface-4);"></div>
 
-                <!-- User -->
                 <button
                     class="flex items-center gap-2 rounded-lg px-2 py-1 transition-colors hover:bg-[var(--surface-3)] focus-visible:outline-neon"
                     aria-label="Menú de usuario: Admin"
@@ -418,7 +401,6 @@
         </header>
 
 
-        <!-- ── Page Content ────────────────────────────────────── -->
         <main
             id="content"
             class="flex-1 overflow-y-auto p-6"

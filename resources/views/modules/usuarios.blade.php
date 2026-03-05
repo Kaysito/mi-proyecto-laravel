@@ -1,7 +1,12 @@
 @extends('layouts.app')
 
 @section('title', $title)
-@section('breadcrumb', $title)
+
+@section('breadcrumb')
+    <span class="text-[var(--text-3)]">Seguridad</span>
+    <span class="breadcrumb-sep">/</span>
+    <span class="text-[var(--text-1)] font-medium">{{ $title }}</span>
+@endsection
 
 @section('content')
 <div class="bg-[var(--surface-2)] rounded-xl border border-[var(--surface-4)] shadow-card p-6">
