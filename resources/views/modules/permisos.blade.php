@@ -52,12 +52,22 @@
         </table>
     </div>
 
-    <div class="mt-5 flex flex-col sm:flex-row justify-between items-center text-sm gap-4">
-        <span class="text-[var(--text-3)]">Mostrando <span class="text-[var(--text-1)] font-medium">1</span> a <span class="text-[var(--text-1)] font-medium">5</span> de <span class="text-[var(--text-1)] font-medium">20</span> registros</span>
-        <div class="flex items-center space-x-1">
-            <button class="px-3 py-1.5 rounded-md border border-[var(--surface-4)] bg-[var(--surface-2)] text-[var(--text-3)] hover:text-[var(--text-1)] hover:bg-[var(--surface-3)] transition-colors"><i class="fas fa-chevron-left text-xs"></i></button>
-            <button class="px-3 py-1.5 rounded-md border border-neon-border bg-neon-muted text-[var(--neon)] font-medium transition-colors">1</button>
-            <button class="px-3 py-1.5 rounded-md border border-[var(--surface-4)] bg-[var(--surface-2)] text-[var(--text-3)] hover:text-[var(--text-1)] hover:bg-[var(--surface-3)] transition-colors"><i class="fas fa-chevron-right text-xs"></i></button>
+    {{-- NUEVOS CONTROLES DE PAGINACIÓN (Estilo Dark Neon) --}}
+    <div id="paginacionControles" class="bg-[var(--surface-2)] px-5 py-4 flex items-center justify-between border-t border-[var(--surface-4)] rounded-b-xl mt-2 hidden">
+        <div class="w-full flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+                <p class="text-sm text-[var(--text-3)]">
+                    Mostrando 
+                    <span id="infoInicio" class="font-semibold text-[var(--text-1)]"></span> a 
+                    <span id="infoFin" class="font-semibold text-[var(--text-1)]"></span> de 
+                    <span id="infoTotal" class="font-semibold text-[var(--text-1)]"></span> registros
+                </p>
+            </div>
+            <div>
+                <nav id="paginacionBotones" class="inline-flex items-center gap-1.5" aria-label="Pagination">
+                    {{-- JS genera los botones aquí --}}
+                </nav>
+            </div>
         </div>
     </div>
 </div>
