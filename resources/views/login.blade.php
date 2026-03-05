@@ -382,18 +382,13 @@
 </head>
 <body>
 
-    <!-- Glow orbs -->
     <div class="glow-orb" style="top:-120px; left:-120px;"></div>
     <div class="glow-orb" style="bottom:-120px; right:-120px;"></div>
 
     <div class="page">
 
-        <!-- ╔══════════════════════════════════╗ -->
-        <!-- ║         LEFT — BRAND             ║ -->
-        <!-- ╚══════════════════════════════════╝ -->
         <section class="brand-panel" aria-hidden="true">
 
-            <!-- Logo -->
             <div style="display:flex; align-items:center; gap:12px;">
                 <div class="logo-mark">
                     <i class="fas fa-bolt" style="color:#fff; font-size:13px;"></i>
@@ -404,7 +399,6 @@
                 </div>
             </div>
 
-            <!-- Headline -->
             <div>
                 <h1 class="brand-headline">
                     Control total<br>sobre tu <em>plataforma</em>
@@ -436,21 +430,16 @@
                 </div>
             </div>
 
-            <!-- Footer -->
             <div class="brand-footer">
                 © {{ date('Y') }} PROYECTO &nbsp;·&nbsp; SISTEMA CORPORATIVO &nbsp;·&nbsp; USO INTERNO
             </div>
         </section>
 
 
-        <!-- ╔══════════════════════════════════╗ -->
-        <!-- ║         RIGHT — FORM             ║ -->
-        <!-- ╚══════════════════════════════════╝ -->
         <section class="form-panel" style="position:relative;">
 
             <div class="form-box">
 
-                <!-- Eyebrow + title -->
                 <div class="form-eyebrow">Acceso al sistema</div>
                 <h2 class="form-title">Bienvenido de nuevo</h2>
                 <p class="form-subtitle">Ingresa tus credenciales para continuar.</p>
@@ -472,11 +461,9 @@
                 </div>
                 @endif
 
-                <!-- Form -->
                 <form action="{{ route('login.post') }}" method="POST" novalidate>
                     @csrf
 
-                    <!-- Usuario -->
                     <div class="field">
                         <div class="field-label">
                             <label for="usuario">Usuario</label>
@@ -497,11 +484,10 @@
                         </div>
                     </div>
 
-                    <!-- Contraseña -->
                     <div class="field">
                         <div class="field-label">
                             <label for="password">Contraseña</label>
-                            <a href="{{ route('password.request') ?? '#' }}" tabindex="-1">¿Olvidaste la tuya?</a>
+                            <a href="#" tabindex="-1">¿Olvidaste la tuya?</a>
                         </div>
                         <div class="input-wrap">
                             <i class="fas fa-lock input-icon"></i>
@@ -537,13 +523,11 @@
                         </div>
                     </div>
 
-                    <!-- Recordarme -->
                     <div class="remember-row">
                         <input type="checkbox" id="remember" name="remember" class="checkbox-custom">
                         <label for="remember" class="remember-label">Mantener sesión iniciada</label>
                     </div>
 
-                    <!-- reCAPTCHA -->
                     <div class="captcha-box" aria-label="Verificación reCAPTCHA">
                         <i class="fas fa-robot" style="font-size:18px; color:var(--text-3);"></i>
                         <div>
@@ -552,7 +536,6 @@
                         </div>
                     </div>
 
-                    <!-- Submit -->
                     <button type="submit" class="btn-submit">
                         <i class="fas fa-arrow-right-to-bracket" style="font-size:13px;"></i>
                         Ingresar al sistema
@@ -560,7 +543,6 @@
 
                 </form>
 
-                <!-- Footer note -->
                 <div class="form-footer">
                     ¿Problemas para acceder? Contacta a
                     <a href="mailto:soporte@proyecto.mx">soporte técnico</a>
@@ -568,7 +550,6 @@
 
             </div>
 
-            <!-- System status -->
             <div class="status-bar">
                 <div class="status-dot"></div>
                 <span>Todos los sistemas operativos</span>
