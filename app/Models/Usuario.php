@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Notifications\Notifiable;
-use Tymon\JWTAuth\Contracts\JWTSubject;
+use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 
 class Usuario extends Authenticatable implements JWTSubject
 {
@@ -27,19 +27,23 @@ class Usuario extends Authenticatable implements JWTSubject
         'strPwd',
     ];
 
-    // Laravel leerá strPwd como password
+    // Laravel usará strPwd como contraseña
     public function getAuthPassword()
     {
         return $this->strPwd;
     }
 
-    // JWT identifica al usuario con su ID
+    /*
+    |--------------------------------------------------------------------------
+    | JWT Methods
+    |--------------------------------------------------------------------------
+    */
+
     public function getJWTIdentifier()
     {
         return $this->getKey();
     }
 
-    // Claims extra del token (puede quedar vacío)
     public function getJWTCustomClaims()
     {
         return [];
