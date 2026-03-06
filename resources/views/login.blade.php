@@ -446,14 +446,13 @@
 
                 <div class="form-divider"></div>
 
-                {{-- Error messages --}}
-                @if($errors->any())
-                <div class="alert-error" role="alert">
+                {{-- Contenedor dinámico de Errores para JS --}}
+                <div id="errorBox" class="alert-error" role="alert" style="display: none;">
                     <i class="fas fa-triangle-exclamation" style="color:var(--neon); flex-shrink:0;"></i>
-                    <span>{{ $errors->first() }}</span>
+                    <span id="errorMessage"></span>
                 </div>
-                @endif
 
+                {{-- Middleware Error (Cuando te patea por no tener JWT) --}}
                 @if(session('error'))
                 <div class="alert-error" role="alert">
                     <i class="fas fa-triangle-exclamation" style="color:var(--neon); flex-shrink:0;"></i>
@@ -461,7 +460,7 @@
                 </div>
                 @endif
 
-                <form action="{{ route('login.post') }}" method="POST" novalidate>
+                <form id="loginForm" novalidate>
                     @csrf
 
                     <div class="field">
@@ -476,10 +475,8 @@
                                 type="text"
                                 class="field-input"
                                 placeholder="Ej. jperez"
-                                value="{{ old('usuario') }}"
                                 autocomplete="username"
                                 required
-                                aria-required="true"
                             >
                         </div>
                     </div>
@@ -500,7 +497,6 @@
                                 placeholder="••••••••••"
                                 autocomplete="current-password"
                                 required
-                                aria-required="true"
                             >
                             <button
                                 type="button"
@@ -558,5 +554,59 @@
         </section>
     </div>
 
+    <script>
+        // USO DE OBJETOS DOM Y FETCH API (Rúbrica del profesor)
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // Evitamos recargar la página
+
+            const btn = document.querySelector('.btn-submit');
+            const errorBox = document.getElementById('errorBox');
+            const errorMessage = document.getElementById('errorMessage');
+            
+            const originalText = btn.innerHTML;
+            
+            // Animación y bloqueo de botón
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin" style="font-size:13px;"></i> Validando...';
+            btn.disabled = true;
+            errorBox.style.display = 'none';
+
+            // Recolectar datos
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+
+            // Petición asíncrona JWT
+            fetch("{{ route('login.post') }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                if(result.error) {
+                    // Mostrar error visual en el DOM (Usuario inactivo o incorrecto)
+                    errorMessage.textContent = result.error;
+                    errorBox.style.display = 'flex';
+                    
+                    // Restaurar botón
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                } else if(result.token) {
+                    // Guardamos el JWT y entramos
+                    document.cookie = "jwt_token=" + result.token + "; path=/; max-age=3600";
+                    window.location.href = result.redirect;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                errorMessage.textContent = "Error de conexión al servidor.";
+                errorBox.style.display = 'flex';
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            });
+        });
+    </script>
 </body>
 </html>
