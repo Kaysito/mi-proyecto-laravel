@@ -9,47 +9,60 @@ class AuthController extends Controller
 {
     public function login(Request $request)
     {
-        // 1. Validar que los campos no vengan vacíos
+        // 1️⃣ Validación de campos
         $request->validate([
             'usuario'  => 'required|string',
             'password' => 'required|string'
         ], [
-            'usuario.required' => 'El campo usuario es obligatorio.',
+            'usuario.required'  => 'El campo usuario es obligatorio.',
             'password.required' => 'La contraseña es obligatoria.'
         ]);
 
+        // 2️⃣ Credenciales adaptadas a la BD solicitada
         $credentials = [
-            'strNombreUsuario' => $request->usuario, 
+            'strNombreUsuario' => $request->usuario,
             'password' => $request->password
         ];
 
-        // 2. Intentar iniciar sesión generando el Token JWT
-        // Usamos guard('api') que configuramos previamente para JWT
+        // 3️⃣ Intentar autenticación con JWT
         if (!$token = Auth::guard('api')->attempt($credentials)) {
             return response()->json([
                 'error' => 'El usuario no existe o la contraseña es incorrecta.'
-            ]);
+            ], 401);
         }
 
-        // 3. Verificar si el usuario está ACTIVO (idEstadoUsuario)
+        // 4️⃣ Obtener usuario autenticado
         $user = Auth::guard('api')->user();
+
+        // 5️⃣ Verificar estado del usuario
         if (!$user->idEstadoUsuario) {
             Auth::guard('api')->logout();
+
             return response()->json([
-                'error' => 'Tu estado es inactivo. Contacta al administrador.'
-            ]);
+                'error' => 'Tu usuario está inactivo. Contacta al administrador.'
+            ], 403);
         }
 
-        // 4. Todo correcto: Devolver el Token al Fetch API
+        // 6️⃣ Respuesta exitosa para Fetch API
         return response()->json([
             'token' => $token,
+            'usuario' => [
+                'id' => $user->id,
+                'nombre' => $user->strNombreUsuario,
+                'correo' => $user->strCorreo,
+                'perfil' => $user->idPerfil
+            ],
             'redirect' => '/admin/home'
         ]);
     }
 
-    public function logout(Request $request)
+    public function logout()
     {
-        // Destruimos la cookie que contiene el JWT para cerrar sesión
-        return redirect('/')->withCookie(cookie()->forget('jwt_token'));
+        // 7️⃣ Cerrar sesión JWT
+        Auth::guard('api')->logout();
+
+        // eliminar cookie del frontend
+        return redirect('/')
+            ->withCookie(cookie()->forget('jwt_token'));
     }
 }
