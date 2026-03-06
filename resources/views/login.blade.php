@@ -19,18 +19,17 @@
             --neon-glow-sm:  0 0 10px rgba(255,23,68,0.35);
             --neon-glow-md:  0 0 24px rgba(255,23,68,0.30), 0 0 48px rgba(255,23,68,0.12);
 
-            /* Surfaces — balanced dark, not pure black */
-            --bg:         #111114;   /* page bg: slightly warm dark */
-            --panel:      #18181C;   /* card bg: lifted one step */
-            --input-bg:   #1F1F24;   /* input fields */
-            --input-bg-f: #232328;   /* input focused */
-            --border:     #2A2A32;   /* neutral border */
-            --border-f:   rgba(255,23,68,0.35); /* focused border */
+            --bg:         #111114;
+            --panel:      #18181C;
+            --input-bg:   #1F1F24;
+            --input-bg-f: #232328;
+            --border:     #2A2A32;
+            --border-f:   rgba(255,23,68,0.35);
             --divider:    #22222A;
 
-            --text-1:     #EEEEF2;   /* headings */
-            --text-2:     #9898A8;   /* body / labels */
-            --text-3:     #52525E;   /* placeholders / hints */
+            --text-1:     #EEEEF2;
+            --text-2:     #9898A8;
+            --text-3:     #52525E;
         }
 
         html, body {
@@ -42,7 +41,6 @@
             color: var(--text-1);
         }
 
-        /* ── Background grid pattern ────────────────────────── */
         body::before {
             content: '';
             position: fixed; inset: 0;
@@ -54,7 +52,6 @@
             z-index: 0;
         }
 
-        /* ── Glow orb ───────────────────────────────────────── */
         .glow-orb {
             position: fixed;
             width: 520px; height: 520px;
@@ -64,7 +61,6 @@
             z-index: 0;
         }
 
-        /* ── Layout ─────────────────────────────────────────── */
         .page {
             position: relative; z-index: 1;
             min-height: 100vh;
@@ -72,7 +68,6 @@
             grid-template-columns: 1fr 1fr;
         }
 
-        /* ── Left panel (brand) ─────────────────────────────── */
         .brand-panel {
             display: flex;
             flex-direction: column;
@@ -150,7 +145,6 @@
             letter-spacing: 0.06em;
         }
 
-        /* ── Right panel (form) ─────────────────────────────── */
         .form-panel {
             display: flex;
             flex-direction: column;
@@ -185,14 +179,12 @@
             margin-top: 5px;
         }
 
-        /* ── Divider ────────────────────────────────────────── */
         .form-divider {
             height: 1px;
             background: linear-gradient(90deg, transparent, var(--divider), transparent);
             margin: 28px 0;
         }
 
-        /* ── Field ──────────────────────────────────────────── */
         .field { margin-bottom: 18px; }
 
         .field-label {
@@ -253,7 +245,6 @@
         .field-input:focus + .input-icon,
         .input-wrap:focus-within .input-icon { color: var(--neon); }
 
-        /* ── Recaptcha placeholder ──────────────────────────── */
         .captcha-box {
             width: 100%;
             background: var(--input-bg);
@@ -269,7 +260,6 @@
         }
         .captcha-box:hover { border-color: rgba(255,23,68,0.2); }
 
-        /* ── Submit button ──────────────────────────────────── */
         .btn-submit {
             width: 100%;
             background: var(--neon);
@@ -298,7 +288,6 @@
             box-shadow: var(--neon-glow-sm);
         }
 
-        /* ── Remember row ───────────────────────────────────── */
         .remember-row {
             display: flex; align-items: center; gap: 9px;
             margin-bottom: 22px;
@@ -334,7 +323,6 @@
             font-size: 13px; color: var(--text-2); cursor: pointer;
         }
 
-        /* ── Alert ──────────────────────────────────────────── */
         .alert-error {
             display: flex; align-items: center; gap: 10px;
             background: rgba(255,23,68,0.07);
@@ -346,7 +334,6 @@
             font-size: 13px; color: #fca5a5;
         }
 
-        /* ── Footer note ────────────────────────────────────── */
         .form-footer {
             margin-top: 24px;
             text-align: center;
@@ -356,7 +343,6 @@
         .form-footer a { color: var(--text-2); text-decoration: none; transition: color 0.15s; }
         .form-footer a:hover { color: var(--neon); }
 
-        /* ── Status bar (bottom of form panel) ─────────────── */
         .status-bar {
             position: absolute; bottom: 20px;
             display: flex; align-items: center; gap: 7px;
@@ -372,7 +358,6 @@
 
         @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.35} }
 
-        /* ── Responsive ─────────────────────────────────────── */
         @media (max-width: 768px) {
             .page { grid-template-columns: 1fr; }
             .brand-panel { display: none; }
@@ -388,7 +373,6 @@
     <div class="page">
 
         <section class="brand-panel" aria-hidden="true">
-
             <div style="display:flex; align-items:center; gap:12px;">
                 <div class="logo-mark">
                     <i class="fas fa-bolt" style="color:#fff; font-size:13px;"></i>
@@ -435,11 +419,8 @@
             </div>
         </section>
 
-
         <section class="form-panel" style="position:relative;">
-
             <div class="form-box">
-
                 <div class="form-eyebrow">Acceso al sistema</div>
                 <h2 class="form-title">Bienvenido de nuevo</h2>
                 <p class="form-subtitle">Ingresa tus credenciales para continuar.</p>
@@ -452,7 +433,7 @@
                     <span id="errorMessage"></span>
                 </div>
 
-                {{-- Middleware Error (Cuando te patea por no tener JWT) --}}
+                {{-- Middleware Error --}}
                 @if(session('error'))
                 <div class="alert-error" role="alert">
                     <i class="fas fa-triangle-exclamation" style="color:var(--neon); flex-shrink:0;"></i>
@@ -460,7 +441,7 @@
                 </div>
                 @endif
 
-                <form id="loginForm" novalidate>
+                <form id="loginForm" action="javascript:void(0);" novalidate>
                     @csrf
 
                     <div class="field">
@@ -505,12 +486,12 @@
                                 onclick="
                                     const i = document.getElementById('password');
                                     const t = this.querySelector('i');
-                                    if(i.type==='password'){
-                                        i.type='text';
-                                        t.classList.replace('fa-eye','fa-eye-slash');
+                                    if(i.type === 'password') {
+                                        i.type = 'text';
+                                        t.classList.replace('fa-eye', 'fa-eye-slash');
                                     } else {
-                                        i.type='password';
-                                        t.classList.replace('fa-eye-slash','fa-eye');
+                                        i.type = 'password';
+                                        t.classList.replace('fa-eye-slash', 'fa-eye');
                                     }
                                 "
                             >
@@ -536,46 +517,39 @@
                         <i class="fas fa-arrow-right-to-bracket" style="font-size:13px;"></i>
                         Ingresar al sistema
                     </button>
-
                 </form>
 
                 <div class="form-footer">
                     ¿Problemas para acceder? Contacta a
                     <a href="mailto:soporte@proyecto.mx">soporte técnico</a>
                 </div>
-
             </div>
 
             <div class="status-bar">
                 <div class="status-dot"></div>
                 <span>Todos los sistemas operativos</span>
             </div>
-
         </section>
     </div>
 
     <script>
-        // USO DE OBJETOS DOM Y FETCH API (Rúbrica del profesor)
         document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault(); // Evitamos recargar la página
-
+            // Animación visual inmediata
             const btn = document.querySelector('.btn-submit');
             const errorBox = document.getElementById('errorBox');
             const errorMessage = document.getElementById('errorMessage');
             
             const originalText = btn.innerHTML;
             
-            // Animación y bloqueo de botón
             btn.innerHTML = '<i class="fas fa-spinner fa-spin" style="font-size:13px;"></i> Validando...';
             btn.disabled = true;
             errorBox.style.display = 'none';
 
-            // Recolectar datos
             const formData = new FormData(this);
             const data = Object.fromEntries(formData.entries());
 
-            // Petición asíncrona JWT
-            fetch("{{ route('login.post') }}", {
+            // OPTIMIZACIÓN: Usamos ruta relativa '/login' para evitar problemas HTTP vs HTTPS
+            fetch("/login", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -586,22 +560,18 @@
             .then(response => response.json())
             .then(result => {
                 if(result.error) {
-                    // Mostrar error visual en el DOM (Usuario inactivo o incorrecto)
                     errorMessage.textContent = result.error;
                     errorBox.style.display = 'flex';
-                    
-                    // Restaurar botón
                     btn.innerHTML = originalText;
                     btn.disabled = false;
                 } else if(result.token) {
-                    // Guardamos el JWT y entramos
                     document.cookie = "jwt_token=" + result.token + "; path=/; max-age=3600";
                     window.location.href = result.redirect;
                 }
             })
             .catch(error => {
-                console.error('Error:', error);
-                errorMessage.textContent = "Error de conexión al servidor.";
+                console.error('Fetch Error:', error);
+                errorMessage.textContent = "Error de conexión. Revisa tu internet.";
                 errorBox.style.display = 'flex';
                 btn.innerHTML = originalText;
                 btn.disabled = false;
