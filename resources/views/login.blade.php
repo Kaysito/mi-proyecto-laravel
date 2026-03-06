@@ -534,11 +534,11 @@
 
     <script>
         document.getElementById('loginForm').addEventListener('submit', function(e) {
-            // Animación visual inmediata
+            e.preventDefault(); 
+            
             const btn = document.querySelector('.btn-submit');
             const errorBox = document.getElementById('errorBox');
             const errorMessage = document.getElementById('errorMessage');
-            
             const originalText = btn.innerHTML;
             
             btn.innerHTML = '<i class="fas fa-spinner fa-spin" style="font-size:13px;"></i> Validando...';
@@ -548,16 +548,29 @@
             const formData = new FormData(this);
             const data = Object.fromEntries(formData.entries());
 
-            // OPTIMIZACIÓN: Usamos ruta relativa '/login' para evitar problemas HTTP vs HTTPS
             fetch("/login", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Accept': 'application/json',
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },
                 body: JSON.stringify(data)
             })
-            .then(response => response.json())
+            .then(async response => {
+                // 🕵️‍♂️ MAGIA DE DEPURACIÓN: Leemos el texto crudo que manda el servidor
+                const text = await response.text(); 
+                try {
+                    // Intentamos leerlo como el JSON que debería ser
+                    return JSON.parse(text); 
+                } catch (error) {
+                    // 🚨 Si falla (porque es HTML), ¡Borramos todo y dibujamos el error en tu pantalla!
+                    document.open();
+                    document.write(text);
+                    document.close();
+                    throw new Error("Laravel arrojó un error en HTML. Mostrándolo en pantalla...");
+                }
+            })
             .then(result => {
                 if(result.error) {
                     errorMessage.textContent = result.error;
@@ -570,11 +583,7 @@
                 }
             })
             .catch(error => {
-                console.error('Fetch Error:', error);
-                errorMessage.textContent = "Error de conexión. Revisa tu internet.";
-                errorBox.style.display = 'flex';
-                btn.innerHTML = originalText;
-                btn.disabled = false;
+                console.error("Detalle:", error);
             });
         });
     </script>
