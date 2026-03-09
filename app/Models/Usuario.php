@@ -27,10 +27,22 @@ class Usuario extends Authenticatable implements JWTSubject
         'strPwd',
     ];
 
-    // Laravel usará strPwd como contraseña
+    /*
+    |--------------------------------------------------------------------------
+    | BLINDAJE DE AUTENTICACIÓN (Sobrescribiendo a Laravel)
+    |--------------------------------------------------------------------------
+    */
+
+    // 1️⃣ Le devuelve a Laravel el valor del hash almacenado
     public function getAuthPassword()
     {
         return $this->strPwd;
+    }
+
+    // 2️⃣ ¡EL ESCUDO! Le dice a Laravel el nombre real de la columna en la BD
+    public function getAuthPasswordName()
+    {
+        return 'strPwd';
     }
 
     /*
@@ -46,6 +58,11 @@ class Usuario extends Authenticatable implements JWTSubject
 
     public function getJWTCustomClaims()
     {
-        return [];
+        // Optimizamos el Token inyectando el perfil y el nombre 
+        // para que no tengas que consultar la BD tantas veces en el frontend
+        return [
+            'perfil' => $this->idPerfil,
+            'nombre' => $this->strNombreUsuario
+        ];
     }
 }
