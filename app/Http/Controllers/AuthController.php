@@ -4,46 +4,28 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash; // 👈 Importante para verificar contraseñas
-use App\Models\Usuario;              // 👈 Importamos tu modelo
+use Illuminate\Support\Facades\Hash;
+use App\Models\Usuario;
 
 class AuthController extends Controller
 {
     public function login(Request $request)
     {
-        // 1️⃣ Validar que escriban algo
-        $request->validate([
-            'usuario'  => 'required|string',
-            'password' => 'required|string'
-        ], [
-            'usuario.required'  => 'El campo usuario es obligatorio.',
-            'password.required' => 'La contraseña es obligatoria.'
-        ]);
+        // 1. Recogemos lo que escribiste en el formulario
+        $usuario_digitado = $request->usuario;
+        $password_digitada = $request->password;
 
-        // 2️⃣ Buscar exactamente ese usuario en TU tabla
-        $user = Usuario::where('strNombreUsuario', $request->usuario)->first();
+        // 2. Buscamos en la base de datos
+        $user = Usuario::where('strNombreUsuario', $usuario_digitado)->first();
+        
+        $existe_en_bd = $user ? 'SÍ EXISTE' : 'NO EXISTE';
+        $hash_db = $user ? $user->strPwd : 'Ninguno';
+        $pass_coincide = ($user && Hash::check($password_digitada, $user->strPwd)) ? 'SÍ' : 'NO';
 
-        // 3️⃣ EL CANDADO MANUAL: Si no existe el usuario, o el Hash no cuadra ¡AFUERA!
-        if (!$user) {
-            return response()->json(['error' => 'El usuario no existe.'], 401);
-        }
-
-        if (!Hash::check($request->password, $user->strPwd)) {
-            return response()->json(['error' => 'La contraseña es incorrecta.'], 401);
-        }
-
-        // 4️⃣ Verificar si el usuario está inactivo
-        if (!$user->idEstadoUsuario) {
-            return response()->json(['error' => 'Tu usuario está inactivo.'], 403);
-        }
-
-        // 5️⃣ Generar el Token JWT porque superó todas las pruebas
-        $token = Auth::guard('api')->login($user);
-
+        // 3. 🚨 LA BOMBA: Detenemos el proceso y te mostramos el reporte en rojo
         return response()->json([
-            'token' => $token,
-            'redirect' => '/admin/home'
-        ]);
+            'error' => "REPORTE DE HACKER: Usuario: [$usuario_digitado] | ¿Existe en BD?: $existe_en_bd | Hash DB: $hash_db | ¿Pass Correcta?: $pass_coincide"
+        ], 401);
     }
 
     public function logout()
