@@ -415,7 +415,7 @@
             </div>
 
             <div class="brand-footer">
-                © {{ date('Y') }} PROYECTO &nbsp;·&nbsp; SISTEMA CORPORATIVO &nbsp;·&nbsp; USO INTERNO
+                © <script>document.write(new Date().getFullYear())</script> PROYECTO &nbsp;·&nbsp; SISTEMA CORPORATIVO &nbsp;·&nbsp; USO INTERNO
             </div>
         </section>
 
@@ -560,38 +560,45 @@
             .then(async response => {
                 const text = await response.text(); 
                 try {
+                    // Intenta leer la respuesta normal en formato JSON
                     return JSON.parse(text); 
                 } catch (error) {
-                    throw new Error("Error interno del servidor. Probablemente un error 500 en Laravel.");
+                    // 🚨 MAGIA: Si Laravel choca y avienta HTML, lo dibujamos en la pantalla completa
+                    document.open();
+                    document.write(text);
+                    document.close();
+                    return null; // Detiene el código JS
                 }
             })
             .then(result => {
-                // Aquí cachamos los errores de validación (campos vacíos)
+                if(!result) return; // Si chocó arriba, salimos.
+                
+                // Errores de campos vacíos
                 if(result.errors) {
                     errorMessage.textContent = Object.values(result.errors)[0][0];
                     errorBox.style.display = 'flex';
                     btn.innerHTML = originalText;
                     btn.disabled = false;
                 } 
-                // Aquí cachamos nuestro error manual (usuario/contraseña incorrecta)
+                // Errores manuales (contraseña mal, usuario inactivo, etc)
                 else if(result.error) {
                     errorMessage.textContent = result.error;
                     errorBox.style.display = 'flex';
                     btn.innerHTML = originalText;
                     btn.disabled = false;
                 } 
-                // Si todo está bien, nos da el token y entramos
+                // Éxito
                 else if(result.token) {
                     document.cookie = "jwt_token=" + result.token + "; path=/; max-age=3600";
                     window.location.href = result.redirect;
                 }
             })
             .catch(error => {
-                errorMessage.textContent = "Hubo un error de comunicación. Verifica la consola.";
+                errorMessage.textContent = "Error de red. Verifica tu consola.";
                 errorBox.style.display = 'flex';
                 btn.innerHTML = originalText;
                 btn.disabled = false;
-                console.error("Detalle:", error);
+                console.error("Detalle de fetch:", error);
             });
         });
     </script>
