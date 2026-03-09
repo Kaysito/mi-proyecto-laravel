@@ -558,31 +558,39 @@
                 body: JSON.stringify(data)
             })
             .then(async response => {
-                // 🕵️‍♂️ MAGIA DE DEPURACIÓN: Leemos el texto crudo que manda el servidor
                 const text = await response.text(); 
                 try {
-                    // Intentamos leerlo como el JSON que debería ser
                     return JSON.parse(text); 
                 } catch (error) {
-                    // 🚨 Si falla (porque es HTML), ¡Borramos todo y dibujamos el error en tu pantalla!
-                    document.open();
-                    document.write(text);
-                    document.close();
-                    throw new Error("Laravel arrojó un error en HTML. Mostrándolo en pantalla...");
+                    throw new Error("Error interno del servidor. Probablemente un error 500 en Laravel.");
                 }
             })
             .then(result => {
-                if(result.error) {
+                // Aquí cachamos los errores de validación (campos vacíos)
+                if(result.errors) {
+                    errorMessage.textContent = Object.values(result.errors)[0][0];
+                    errorBox.style.display = 'flex';
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                } 
+                // Aquí cachamos nuestro error manual (usuario/contraseña incorrecta)
+                else if(result.error) {
                     errorMessage.textContent = result.error;
                     errorBox.style.display = 'flex';
                     btn.innerHTML = originalText;
                     btn.disabled = false;
-                } else if(result.token) {
+                } 
+                // Si todo está bien, nos da el token y entramos
+                else if(result.token) {
                     document.cookie = "jwt_token=" + result.token + "; path=/; max-age=3600";
                     window.location.href = result.redirect;
                 }
             })
             .catch(error => {
+                errorMessage.textContent = "Hubo un error de comunicación. Verifica la consola.";
+                errorBox.style.display = 'flex';
+                btn.innerHTML = originalText;
+                btn.disabled = false;
                 console.error("Detalle:", error);
             });
         });
